@@ -1,18 +1,123 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Weekend Warriors</title>
+<!doctype html>
+<html lang="en">
+  <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="./src/css/bootstrap.css" />
+        <title>Weekend Warriors</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
-</head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/css/bootstrap.min.css" integrity="sha384-GJzZqFGwb1QTTN6wy59ffF1BuGJpLSa9DkKMp0DgiMDm4iYMj70gZWKYbI706tWS" crossorigin="anonymous">
 
-<body>
+    <title>Hello, world!</title>
+  </head>
+  <body><div id='Container'>
 
+      <!--First page -->
+      <div id='firstpage'>
+          <span>Weekend Warrior</span>
+      </div>
 
+      <!--Sign-in page-->
+      <div id='signIn'>
+          <form id="login-form">
 
-        <script src="./src/js/bootstrap.js"></script>
-</body>
+              <div class='input-field'>
+                  <input type="text" id="emailForSignIn" required oninput="this.setCustomValidity('')" oninvalid="this.setCustomValidity('Please fill in your destination.')" class="validate" />
+                  <label for="emailForSignIn">Email</label>
+              </div>
+              <div class='input-field'>
+                  <input type="password" id="pwdForSignIn" required />
+                  <label for="pwdForSignIn">Password</label>
+              </div>
+              <a href='#' id='buttonPassword'>Forgot password? </a>
+              <a href='#' id='buttonUp1'> Register?</a>
+              <br /><br />
+              <button type="submit" id="signIn" class="btn yellow darken-2 floatRight">Sign In</button>
+          </form>
+          <button id='backToWelcom1' class="btn yellow darken-2 floatRight">Back to the main</button>
+      </div>
 
+      <!--Finding password page.-->
+      <div id='passwordMoment'>
+          <form method="post" action="/login">
+              <div class='input-field'>
+                  <input type="text" id="userNameForPassword" class="validate" required="required" title="The user name you used." />
+                  <label for="userNameForPassword">User Name</label>
+              </div>
+              <div class='input-field'>
+                  <input type="email" id="emailForPassword" required="required" title="The email address you used." />
+                  <label for="emailForPassword">Email</label>
+              </div>
+              <a href='#' id='buttonIn1' class='floatRight'>Oh, I just remember my password</a>
+              <br />
+              <button type="submit" id="findingPassword" class="btn yellow darken-2 floatRight">Send me an email</button>
+          </form>
+      </div>
+
+      <!--Sign-up page.-->
+      <div id='signUpMoment'>
+          <form name='form-data'>
+              <div class='row marginForWelcome'>
+                  <div class='input-field col s6 marginForWelcome'>
+                      <input type="email" id="email" required="required" title="This will be used to login." />
+                      <label for="email">Email *</label>
+                  </div>
+                  <div class='input-field col s6 marginForWelcome'>
+                      <input type="email" id="cfemail" required="required" />
+                      <label for="cfemail">Confirm Email</label>
+                  </div>
+              </div>
+              <div class='row marginForWelcome'>
+                  <div class='input-field col s6 marginForWelcome'>
+                      <input type="password" id="pwd" pattern="[A-Za-z0-9]{8,20}" required="required" title="Password must be 8-20 characters long." />
+                      <label for="pwd">Password *</label>
+                  </div>
+                  <div class='input-field col s6 marginForWelcome'>
+                      <input type="password" id="cfpwd" pattern="[A-Za-z0-9]{8,20}" required="required" />
+                      <label for="cfpwd">Confirm Password </label>
+                  </div>
+              </div>
+
+              <div class="row marginForWelcome">
+
+                  <div class='input-field col s12 marginForWelcome'>
+                      <input type="text" id="username" pattern="[A-Za-z]{8,20}" required="required" title="This will be your username!" />
+                      <label for="username">Username *</label>
+                  </div>
+              </div>
+              <div class='row marginForWelcome'>
+                  <div class='input-field col s6 marginForWelcome'>
+                      <input type="number" id="age" min="18" max="100" title="This will be used only for statistical purpose." />
+                      <label for="age">Age</label>
+                  </div>
+                  <div class="row marginForWelcome">
+
+                      <div class='input-field col s6 marginForWelcome'>
+                          <select id='gender'>
+                              <option value="" disabled selected>Gender</option>
+                              <option value="f">Female</option>
+                              <option value="m">Male</option>
+                          </select>
+                      </div>
+                  </div>
+              </div>
+              <div id="test" class="file-field input-field marginForWelcome">
+                  <div class="btn yellow darken-2">
+                      <span>File</span>
+                      <input id="profileImg" type="file" name="profileImg">
+                  </div>
+                  <div class="file-path-wrapper">
+                      <input class="file-path validate" type="text" placeholder="Your Photo">
+                  </div>
+              </div>
+              <button type="submit" id="signedUp" class="btn yellow darken-2 floatRight">Sign Up</button>
+          </form>
+          <button id='backToWelcom2' class="btn yellow darken-2 floatRight">Back to the main</button>
+
+      </div>
+  </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.6/umd/popper.min.js" integrity="sha384-wHAiFfRlMFy6i5SRaxvfOCifBUQy1xHdJ/yoi7FRNXMRBu5WHdZYu1hA6ZOblgut" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.2.1/js/bootstrap.min.js" integrity="sha384-B0UglyR+jN6CkvvICOB2joaf5I4l3gm9GU6Hc1og6Ls7i6U/mkkaduKaBhlAXv9k" crossorigin="anonymous"></script>
+  </body>
 </html>
