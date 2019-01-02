@@ -8,9 +8,21 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" href="./src/css/bootstrap.css" />
-    <link rel="stylesheet" href="./src/css/home.css" />
-
-        <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+      <link rel="stylesheet" href="./src/css/home.css" />
+      <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+      <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
+      <script>
+        // Initialize Firebase
+        var config = {
+          apiKey: "AIzaSyDqgSL0lZ2qrY6p9ABqa1gDTHlWXIcpWDk",
+          authDomain: "weekend-warriors-b8fdc.firebaseapp.com",
+          databaseURL: "https://weekend-warriors-b8fdc.firebaseio.com",
+          projectId: "weekend-warriors-b8fdc",
+          storageBucket: "weekend-warriors-b8fdc.appspot.com",
+          messagingSenderId: "1017591858330"
+        };
+        firebase.initializeApp(config);
+      </script>
 </head>
 
 <body>
