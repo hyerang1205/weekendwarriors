@@ -28,8 +28,8 @@
 
         <!--Sign-in page-->
         <div id='signIn'>
-
             <p>Welcome, Weekend Warrior</p>
+            <p id="inErrorMessage" class="error"></p>
             <form action="javascript:">
                 <div class="form-group">
                     <label for="inEmail">Email address</label>
@@ -69,6 +69,7 @@
             <p>Join Weekend Warrior</p>
             <form action="javascript:">
                 <div class="form-group">
+                    <p id="emailError" class="error"></p>
                     <label for="upEmail">Email Address *</label>
                     <input type="email" class="form-control" id="upEmail" pattern="[a-z0-9]+@my.bcit.ca$" required="required"
                         aria-describedby="emailHelp" placeholder="email@my.bcit.ca">
@@ -82,6 +83,7 @@
                     <label for="upProgram">BCIT Program *</label>
                     <input type="text" class="form-control" id="upProgram" required="required" placeholder="BCIT Program">
                 </div>
+                <p id="passwordConfirmError" class="error"></p>
                 <div id='marginBottom' class="form-row">
                     <div class="col">
                         <label for="upPassword">Password *</label>

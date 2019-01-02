@@ -1,3 +1,7 @@
+function redirectToHomePage() {
+    window.location.href = 'home.html';
+}
+
 function signUp() {
     let email = document.getElementById("upEmail").value;
     let pw = document.getElementById("upPassword").value;
@@ -8,14 +12,17 @@ function signUp() {
     if (email && pw && cfpw && userName) {
         if (!isBcitEmail(email)) {
             // Please use the BCIT email (my.bcit.ca).
+            document.getElementById("emailError").innerHTML = "Please use the BCIT email (my.bcit.ca)."
         } else if (pw != cfpw) {
             // The password does not match.
+            document.getElementById("passwordConfirmError").innerHTML = "The password does not match."
+
         } else {
             firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function (error) {
                 var errorMessage = error.message;
             });
             // Redirect to main.html.
-            document.write("Thanks");
+            redirectToHomePage();
         }
     } else {
         // Please fill in the blanks.
@@ -31,17 +38,19 @@ function login() {
             var errorCode = error.code;
             var errorMessage = error.message;
             if (errorCode) {
+                document.getElementById('inErrorMessage').innerHTML = errorMessage;
                 console.log("Failed to login");
                 isLoggedIn = false;
             }
         });
     }
-    setTimeout(function() {
+    setTimeout(function () {
         if (isLoggedIn) {
-            document.write("logged in");
+            redirectToHomePage();
         }
     }, 500);
 }
+
 function isBcitEmail(email) {
     let re = /\w+[@]my[.]bcit[.]ca/;
 

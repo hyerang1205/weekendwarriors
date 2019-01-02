@@ -21,6 +21,10 @@
     margin-bottom: 1em;
 }
 
+.error {
+    color: tomato;
+}
+
 
 /* #first{
     position: relative;
