@@ -5,14 +5,90 @@
     <title>Weekend Warriors</title>
     <meta charset="utf-8">
     <link rel="stylesheet" href="./src/css/bootstrap.css" />
+    <link rel="stylesheet" href="./src/css/index.css" />
 
 </head>
 
 <body>
+    <div id='Container'>
+
+
+        <!--Sign-in page-->
+        <div id='signIn'>
+
+                <p>Welcome, Weekend Warrior</p>
+            <form>
+                <div class="form-group">
+                    <label for="inEmail">Email address</label>
+                    <input type="email" class="form-control" id="inEmail" required="required" aria-describedby="inEmailHelp" placeholder="Enter email">
+                    <small id="inEmailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small>
+                </div>
+                <div class="form-group">
+                    <label for="inPassword">Password</label>
+                    <input type="password" class="form-control" id="inPassword" required="required" placeholder="Password">
+                </div>
+                <button type="submit" class="btn btn-primary signButton">Sign In</button>
+            </form>
+            <button type="button" id='createA' class="btn btn-light otherButton">Create An Account</button>
+
+        </div>
+
+        <!--Finding password page.-->
+        <!-- <div id='passwordMoment'>
+            <form method="post" action="/login">
+                <div class='input-field'>
+                    <input type="text" id="userNameForPassword" class="validate" required="required" title="The user name you used." />
+                    <label for="userNameForPassword">User Name</label>
+                </div>
+                <div class='input-field'>
+                    <input type="email" id="emailForPassword" required="required" title="The email address you used." />
+                    <label for="emailForPassword">Email</label>
+                </div>
+                <a href='#' id='buttonIn1' class='floatRight'>Oh, I just remember my password</a>
+                <br />
+                <button type="submit" id="findingPassword" class="btn yellow darken-2 floatRight">Send me an email</button>
+            </form>
+        </div> -->
+
+        <!--Sign-up page.-->
+        <div id='signUp'>
+
+                            <p>Join Weekend Warrior</p>
+            <form>
+                <div class="form-group">
+                    <label for="upEmail">Email Address *</label>
+                    <input type="email" class="form-control" id="upEmail" pattern="[a-z0-9]+@my.bcit.ca$" required="required" aria-describedby="emailHelp" placeholder="email@my.bcit.ca">
+                    <small id="emailHelp" class="form-text text-muted">You need to use your myBCIT email.</small>
+                </div>
+                <div class="form-group">
+                    <label for="upName">Full Name *</label>
+                    <input type="text" class="form-control" id="upName" required="required" placeholder="Full Name">
+                </div>
+                <div class="form-group">
+                    <label for="upProgram">BCIT Program *</label>
+                    <input type="text" class="form-control" id="upProgram" required="required" placeholder="BCIT Program">
+                </div>
+                <div id='marginBottom' class="form-row">
+                    <div class="col">
+                        <label for="upPassword">Password *</label>
+                        <input type="password" class="form-control" id="upPassword" required="required" pattern="[A-Za-z0-9]{8,20}" placeholder="Password">
+                    </div>
+                    <div class="col">
+                        <label for="exampleInputPassword1">Confirm Password</label>
+                        <input type="password" class="form-control" id="upPasswordConfirm" required="required" pattern="[A-Za-z0-9]{8,20}" placeholder="Password">
+                    </div>
+                </div>
+                <button type="submit" id='signUpButton' class="btn btn-primary signButton" >Sign Up</button>
+            </form>
+            <button type="button" id='back' class="btn btn-light otherButton">Back</button>
+        </div>
+    </div>
 
 
 
-        <script src="./src/js/bootstrap.js"></script>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="./src/js/bootstrap.js"></script>
+    <script src="./src/js/index.js"></script>
 </body>
 
 </html>

@@ -1,0 +1,39 @@
+#signIn, #signUp {
+
+        position: relative;
+        left:36%;
+        top:6em;
+    width: 25em;
+    height: 34em;
+}
+
+.signButton {
+    float : right ;
+}
+.otherButton{
+    float: left;
+}
+
+#createA{
+    float: left;
+}
+#marginBottom{
+    margin-bottom: 1em;
+}
+
+
+/* #first{
+    position: relative;
+    top: 20em;
+    background-color: blue;
+} */
+
+#signIn{
+    border: solid 1px black;
+    padding: 3em !important;
+}
+#signUp{
+    display: none;
+        border: solid 1px black;
+    padding: 2em !important;
+}
