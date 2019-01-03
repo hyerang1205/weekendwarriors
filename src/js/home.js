@@ -1,6 +1,7 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
+
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -45,7 +46,7 @@ function switchButtons(grossKey) {
     const chatButton = document.createElement("button");
     chatButton.innerHTML = 'Chat'
     chatButton.setAttribute("type", "button");
-    chatButton.setAttribute("class", "btn btn-primary");
+    chatButton.setAttribute("class", "btn btn-primary rightFloat");
     //chatButton.setAttribute("data-toggle", "modal");
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
@@ -77,6 +78,8 @@ function populatePosts(_postName = "") {
             var grossKey = childSnapshot.key;
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
+            var date = childSnapshot.child('date').val();
+            var category = childSnapshot.child('category').val();
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -92,18 +95,21 @@ function populatePosts(_postName = "") {
             postDescription.setAttribute("class", "card-text");
             postDescription.innerHTML = description;
 
-            // let date = document.createElement('p');
-            // let dateSmall = document.createElement('small');
-            // dateSmall.setAttribute("class", "text-muted");
-            // dateSmall.innerHTML = date;
-            // date.appendChild(dateSmall);
+            let postDate = document.createElement('small');
+            postDate.setAttribute("class", "text-muted");
+            postDate.innerHTML = date;
+
+
+            let postCate = document.createElement('span');
+            postCate.setAttribute("class", "text-muted");
+            postCate.innerHTML = category;
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
-            signUpButton.setAttribute("class", "btn btn-primary");
+            signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
-            signUpButton.onclick = function () {
+            signUpButton.onclick = function() {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
                 // firebase.auth().onAuthStateChanged(function(user) {
@@ -133,8 +139,9 @@ function populatePosts(_postName = "") {
             }
 
             cardDiv.appendChild(title);
+            cardDiv.appendChild(postCate);
             cardDiv.appendChild(postDescription);
-            //cardDiv.appendChild(date);
+            cardDiv.appendChild(postDate);
             cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
