@@ -4,6 +4,7 @@ a:hover{
 body{
     background-color: #ebe6e6;
 }
-.card-columns{
-    margin-top: 2em;
+
+#posts{
+  padding: 1em;
 }
