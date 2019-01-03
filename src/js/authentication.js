@@ -7,7 +7,7 @@ function signUp() {
     let pw = document.getElementById("upPassword").value;
     let cfpw = document.getElementById("upPasswordConfirm").value;
     let userName = document.getElementById("upName").value;
-
+    let userUID = ""
 
     if (email && pw && cfpw && userName) {
         if (!isBcitEmail(email)) {
@@ -18,13 +18,16 @@ function signUp() {
             document.getElementById("passwordConfirmError").innerHTML = "The password does not match."
 
         } else {
-            firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function (error) {
-                var errorMessage = error.message;
+            firebase.auth().createUserWithEmailAndPassword(email, pw)
+            .then(function(data){
+              userUID = data.user.uid;
+              addUserToJson(userName, email, userUID);
+              login(email, pw);
+              console.log(userUID);
+              //Here if you want you can sign in the user
+            }).catch(function(error) {
+                //Handle error
             });
-            // addUserToJson(userName, email);
-            setTimeout(function() {
-                login(email, pw);
-            }, 500);
         }
     } else {
         // Please fill in the blanks.
@@ -73,19 +76,16 @@ function isBcitEmail(email) {
     }
 }
 
-function addUserToJson(userName, uid) {
+function addUserToJson(userName, email, uid) {
     // let re = /(\w+)[@]my[.]bcit[.]ca/;
     // let result = re.exec(email)[1];
-    console.log(`NEW USER UID: ${uid}\n NEW USER NAME: ${userName}`);
-    // let ref = firebase.database().ref("users/" + uid).set({
-    //     name: userName
-    // });
-    // let ref = firebase
-    // ref.update({
-    //     [uid]: {
-    //         name: userName
-    //     }
-    // });
+    let ref = firebase.database().ref("users");
+    ref.update({
+        [uid]: {
+            name: userName,
+            email: email,
+        }
+    });
 }
 document.getElementById("signUpButton").onclick = signUp;
 document.getElementById("signInButton").onclick = signIn;
