@@ -46,9 +46,17 @@ function login() {
     }
     setTimeout(function () {
         if (isLoggedIn) {
-            redirectToHomePage();
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    // User is signed in.
+                    var displayName = user.displayName;
+                    var email = user.email;
+                    var uid = user.uid;
+                    redirectToHomePage();
+                }
+            });
         }
-    }, 500);
+    }, 700);
 }
 
 function isBcitEmail(email) {
@@ -60,6 +68,7 @@ function isBcitEmail(email) {
         return false;
     }
 }
+
 
 document.getElementById("signUpButton").onclick = signUp;
 document.getElementById("signInButton").onclick = login;
