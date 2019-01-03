@@ -60,13 +60,12 @@ function switchButtons(grossKey) {
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
         $('#chat-modal').modal('show');
+        populateChatModal(grossKey);
     });
     parentDiv.appendChild(chatButton);
 }
 
 function signUp(postRef, userId) {
-    //postRef.child('users').child(userId).setValue(true);
-    // let postRef = firebase.database().ref('posts').child(childKey).child('users');
     console.log(postRef);
     postRef.child(userId).set(true);
 }
@@ -74,13 +73,21 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "") {
+function populatePosts(_postName = "", _category = "") {
     removePostsFromBoard();
+    console.log("_postName: ",_postName);
+    console.log("_category: ", _category);
     var postData = firebase.database().ref('posts').once('value', function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
             var postName = childSnapshot.child('name').val();
+            var category = childSnapshot.child('category').val();
             if (_postName !== "") {
                 if (postName.search(_postName) < -0) {
+                    return;
+                }
+            }
+            if (_category !== "") {
+                if (category.search(_category) < 0) {
                     return;
                 }
             }
@@ -88,7 +95,6 @@ function populatePosts(_postName = "") {
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
-            var category = childSnapshot.child('category').val();
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -118,23 +124,9 @@ function populatePosts(_postName = "") {
             signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
-            signUpButton.onclick = function() {
+            signUpButton.onclick = function () {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
-                // firebase.auth().onAuthStateChanged(function(user) {
-                //     if (user) {
-                //         var email = user.email;
-                //         console.log(email);
-                //         let re = /(\w+)[@]my[.]bcit[.]ca/;
-                //         let result = re.exec(email)[1];
-                //         console.log(result);
-                //         firebase.database().ref("users").on("child_added", function(snapshot) {
-                //             if (snapshot.key === result) {
-                //                 userId = snapshot.val().name;
-                //             }
-                //         });
-                //     }
-                // });
                 setTimeout(function () {
                     if (userId === "") {
                         // Login required
@@ -158,19 +150,54 @@ function populatePosts(_postName = "") {
     });
 }
 
+function populateChatModal(postId) {
+    console.log("populating chat messages for post #" + postId);
+    let posts = [];
+
+    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            const msgObj = {
+                author: childSnapshot.child('name').val(),
+                content: childSnapshot.child('message').val()
+            };
+            posts.push(msgObj);
+        });
+    }).then(() => {
+        const chatBody = document.getElementById("chat-body");
+        chatBody.innerHTML = "";
+
+        posts.forEach((msg) => {
+            const chatMsg = createChatNode(msg.content, msg.author);
+            console.log("HTML node for message: " + chatMsg);
+
+            chatBody.appendChild(chatMsg);
+        });
+    });
+
+}
+
 function lookupUserName(userId) {
     let username;
     firebase.database().ref("/users/" + userId).once("value").then((snap) => {
         username = snap.child("name").val();
+        return username;
     });
-
-    return username;
 }
 
 function getMessages(postId) {
     let posts = [];
-    // TODO
-    firebase.database().ref("/posts/" + postId + "/messages")
+
+    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            const msgObj = {
+                author: childSnapshot.child('name').val(),
+                content: childSnapshot.child('message').val()
+            };
+            posts.push(msgObj);
+        });
+    }).then(() => {
+        return posts;
+    });
 }
 
 function createChatNode(content, author) {
@@ -216,6 +243,19 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
-document.getElementById("searchButton").onclick = function () {
-    populatePosts(document.getElementById("searchField").value);
+
+document.getElementById("searchEntertainment").onclick = function() {
+    populatePosts("", "Entertainment");
+}
+
+document.getElementById("searchLearning").onclick = function() {
+    populatePosts("", "Learning");
+}
+
+document.getElementById("searchOutdoor").onclick = function() {
+    populatePosts("", "Outdoor");
+}
+
+document.getElementById("searchSports").onclick = function() {
+    populatePosts("", "Sports");
 }
