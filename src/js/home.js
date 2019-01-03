@@ -32,7 +32,7 @@ function addPost() {
 
     firebase.database().ref().update(updates).then(() => {
         signUp(postRef.child(key).child('users'), userId);
-        document.location.reload(true);
+        populatePosts();
         // switchButtons(key);
     });
 
@@ -91,7 +91,11 @@ function populatePosts(_postName = "", _category = "", _uid = "") {
             console.log(postName);
             console.log(description);
             console.log(users);
-            let userArray = Object.keys(users);
+            userArray = [];
+            for (let key in users) {
+                userArray.push(key);
+            }
+
             if (_uid !== "") {
                 let k = 0;
                 for (let i = 0; i < userArray.length; i++) {
@@ -105,7 +109,6 @@ function populatePosts(_postName = "", _category = "", _uid = "") {
                     return;
                 }
             }
-            console.log(userArray);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
             newDiv.id = grossKey;
