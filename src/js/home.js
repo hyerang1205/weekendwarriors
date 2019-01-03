@@ -66,7 +66,7 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "", _category = "") {
+function populatePosts(_postName = "", _category = "", _uid = "") {
     removePostsFromBoard();
     console.log("_postName: ", _postName);
     console.log("_category: ", _category);
@@ -91,6 +91,21 @@ function populatePosts(_postName = "", _category = "") {
             console.log(postName);
             console.log(description);
             console.log(users);
+            let userArray = Object.keys(users);
+            if (_uid !== "") {
+                let k = 0;
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i] !== _uid) {
+                        continue;
+                    } else {
+                        k++;
+                    }
+                }
+                if (k < 1) {
+                    return;
+                }
+            }
+            console.log(userArray);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
             newDiv.id = grossKey;
@@ -250,17 +265,6 @@ function removePostsFromBoard() {
     $(".card").remove();
 }
 
-
-firebase.auth().onAuthStateChanged(function (user) {
-    if (user) {
-        // User is signed in.
-        var displayName = user.displayName;
-        var email = user.email;
-        var uid = user.uid;
-        console.log(email);
-    }
-});
-
 document.onload = populatePosts();
 
 let searchResultMessage = document.getElementById("searchResultMessage");
@@ -271,6 +275,19 @@ document.getElementById("searchButton").onclick = function() {
     if (document.getElementById("searchField").value === "") {
         searchResultMessage.innerHTML = "";
     }
+}
+
+document.getElementById("searchMyEvent").onclick = function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var uid = user.uid;
+            console.log(uid);
+            populatePosts("", "", uid);
+        }
+    });
 }
 
 document.getElementById("searchViewAll").onclick = function() {
