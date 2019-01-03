@@ -25,10 +25,16 @@ function addPost() {
     });
 }
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts() {
+function populatePosts(_postName="") {
+    removePostsFromBoard();
     var postData = firebase.database().ref('posts').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
+            if (_postName !== "") {
+                if (postName.search(_postName) < -0) {
+                    return;
+                }
+            }
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             console.log(postName);
@@ -86,4 +92,23 @@ document.getElementById("signOutButton").addEventListener("click", () => {
     });
 });
 
+function removePostsFromBoard() {
+    $(".card").remove();
+}
+
+
+firebase.auth().onAuthStateChanged(function(user) {
+    if (user) {
+        // User is signed in.
+        var displayName = user.displayName;
+        var email = user.email;
+        var uid = user.uid;
+        console.log(email);
+    }
+});
+
 document.onload = populatePosts();
+
+document.getElementById("searchButton").onclick = function() {
+    populatePosts(document.getElementById("searchField").value);
+}
