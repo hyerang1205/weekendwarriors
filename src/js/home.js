@@ -67,7 +67,7 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "") {
+function populatePosts(_postName = "", _category = "", _uid = "") {
     removePostsFromBoard();
     var postData = firebase.database().ref('posts').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
@@ -85,6 +85,21 @@ function populatePosts(_postName = "") {
             console.log(postName);
             console.log(description);
             console.log(users);
+            let userArray = Object.keys(users);
+            if (_uid !== "") {
+                let k = 0;
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i] !== _uid) {
+                        continue;
+                    } else {
+                        k++;
+                    }
+                }
+                if (k < 1) {
+                    return;
+                }
+            }
+            console.log(userArray);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
             newDiv.id = grossKey;
@@ -217,6 +232,19 @@ document.getElementById("searchButton").onclick = function() {
     if (document.getElementById("searchField").value === "") {
         searchResultMessage.innerHTML = "";
     }
+}
+
+document.getElementById("searchMyEvent").onclick = function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var uid = user.uid;
+            console.log(uid);
+            populatePosts("", "", uid);
+        }
+    });
 }
 
 document.getElementById("searchViewAll").onclick = function() {
