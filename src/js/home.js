@@ -17,7 +17,7 @@ function addPost() {
         users: userId,
         messages: {
             fakeId: {
-                name: 'WeekendWarriorAdmin',
+                name: 'Weekend Warrior Admin',
                 message: 'Welcome to the chat room for ' + postName
             }
         }
