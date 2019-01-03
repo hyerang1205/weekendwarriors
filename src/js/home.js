@@ -74,7 +74,7 @@ function populatePosts(_postName = "", _category = "", _uid = "") {
         snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
             if (_postName !== "") {
-                if (postName.search(_postName) < -0) {
+                if (postName.search(_postName) < 0) {
                     return;
                 }
             }
@@ -83,6 +83,11 @@ function populatePosts(_postName = "", _category = "", _uid = "") {
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
             var category = childSnapshot.child('category').val();
+            if (_category !== "") {
+                if (category.search(_category) < 0) {
+                    return;
+                }
+            }
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -303,6 +308,7 @@ document.getElementById("searchMyEvent").onclick = function () {
             var uid = user.uid;
             console.log(uid);
             populatePosts("", "", uid);
+            searchResultMessage.innerHTML = "My Events"
         }
     });
 }
@@ -313,21 +319,21 @@ document.getElementById("searchViewAll").onclick = function() {
 }
 
 document.getElementById("searchEntertainment").onclick = function () {
-    populatePosts("", "Entertainment");
+    populatePosts("", "Entertainment", "");
     searchResultMessage.innerHTML = "Search results for \"Entertainment\"";
 }
 
 document.getElementById("searchLearning").onclick = function () {
-    populatePosts("", "Learning");
+    populatePosts("", "Learning", "");
     searchResultMessage.innerHTML = "Search results for \"Learning\"";
 }
 
 document.getElementById("searchOutdoor").onclick = function () {
-    populatePosts("", "Outdoor");
+    populatePosts("", "Outdoor", "");
     searchResultMessage.innerHTML = "Search results for \"Outdoor\"";
 }
 
 document.getElementById("searchSports").onclick = function () {
-    populatePosts("", "Sports");
+    populatePosts("", "Sports", "");
     searchResultMessage.innerHTML = "Search results for \"Sports\"";
 }
