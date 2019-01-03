@@ -21,9 +21,9 @@ function signUp() {
             firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function (error) {
                 var errorMessage = error.message;
             });
-
+            addUserToJson(userName, email);
             setTimeout(function() {
-                redirectToHomePage();
+                login(email, pw);
             }, 500);
         }
     } else {
@@ -31,9 +31,13 @@ function signUp() {
     }
 }
 
-function login() {
+function signIn() {
     let email = document.getElementById("inEmail").value;
     let pw = document.getElementById("inPassword").value;
+    login(email, pw);
+}
+
+function login(email, pw) {
     let isLoggedIn = true;
     if (email && pw) {
         firebase.auth().signInWithEmailAndPassword(email, pw).catch(function (error) {
@@ -50,8 +54,6 @@ function login() {
         if (isLoggedIn) {
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
-                    // User is signed in.
-                    var displayName = user.displayName;
                     var email = user.email;
                     var uid = user.uid;
                     redirectToHomePage();
@@ -60,7 +62,6 @@ function login() {
         }
     }, 700);
 }
-
 function isBcitEmail(email) {
     let re = /\w+[@]my[.]bcit[.]ca/;
 
@@ -71,6 +72,15 @@ function isBcitEmail(email) {
     }
 }
 
-
+function addUserToJson(userName, email) {
+    let re = /(\w+)[@]my[.]bcit[.]ca/;
+    let result = re.exec(email)[1];
+    let ref = firebase.database().ref("users");
+    ref.update({
+        [result]: {
+            name: userName
+        }
+    });
+}
 document.getElementById("signUpButton").onclick = signUp;
-document.getElementById("signInButton").onclick = login;
+document.getElementById("signInButton").onclick = signIn;
