@@ -2,6 +2,12 @@ $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
 
+// $('#myModal').modal('show');
+//
+//    $('#myBtn').on('click', function(){
+//      $('#myModal').modal('show');
+//    });
+
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -33,8 +39,11 @@ function addPost() {
 
     firebase.database().ref().update(updates).then(() => {
         signUp(postRef.child(key).child('users'), userId);
-        switchButtons(key);
+        document.location.reload(true);
+        // switchButtons(key);
     });
+
+    // $('#createEvent').modal('hide');
 }
 
 function switchButtons(grossKey) {
@@ -244,6 +253,9 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
+document.getElementById("searchViewAll").onclick = function() {
+    populatePosts();
+}
 
 document.getElementById("searchEntertainment").onclick = function() {
     populatePosts("", "Entertainment");
