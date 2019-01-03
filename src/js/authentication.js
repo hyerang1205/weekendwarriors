@@ -12,7 +12,7 @@ function signUp() {
     if (email && pw && cfpw && userName) {
         if (!isBcitEmail(email)) {
             // Please use the BCIT email (my.bcit.ca).
-            document.getElementById("emailError").innerHTML = "Please use the BCIT email (my.bcit.ca)."
+            document.getElementById("emailError").innerHTML = "Please use the BCIT email(my.bcit.ca)."
         } else if (pw != cfpw) {
             // The password does not match.
             document.getElementById("passwordConfirmError").innerHTML = "The password does not match."
