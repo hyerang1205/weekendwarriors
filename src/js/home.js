@@ -3,8 +3,8 @@ $('#datepicker').datepicker({
 });
 
 firebase.auth().onAuthStateChanged(function(user) {
-    console.log(user.uid)
-    console.log(user.displayName)
+    console.log("USER UID: " + user.uid)
+    console.log("USER DISPLAY NAME: " + user.displayName)
     firebase.database().ref("users/" + user.uid).update({
         "name": user.displayName,
         "email": user.email
@@ -56,11 +56,16 @@ function populatePosts() {
             signUp.setAttribute("type", "button");
             signUp.setAttribute("class", "btn btn-primary");
             signUp.innerHTML = "Sign Up";
-            signUp.onclick = function () {
+
+            signUp.addEventListener("click", () => {
                 let userId = 'hello';
                 let postRef = firebase.database().ref('posts');
                 postRef.child(postName).child('users').push(userId);
-            }
+            });
+
+            signUp.addEventListener("click", () => {
+                
+            });
 
             cardDiv.appendChild(title);
             cardDiv.appendChild(postDescription);
@@ -71,5 +76,14 @@ function populatePosts() {
         });
     });
 }
+
+document.getElementById("signOutButton").addEventListener("click", () => {
+    firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      window.location.assign("./index.html");
+    });
+});
 
 document.onload = populatePosts();
