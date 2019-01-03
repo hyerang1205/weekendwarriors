@@ -75,7 +75,7 @@ function signUp(postRef, userId) {
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName = "", _category = "") {
     removePostsFromBoard();
-    console.log("_postName: ",_postName);
+    console.log("_postName: ", _postName);
     console.log("_category: ", _category);
     var postData = firebase.database().ref('posts').once('value', function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
@@ -184,6 +184,23 @@ function populateChatModal(postId) {
         });
     });
 
+    const INPUT = document.getElementById("chat-input");
+    const POST_BUTTON = document.getElementById("chat-button");
+
+    POST_BUTTON.addEventListener("click", () => {
+        const content = INPUT.value;
+        let author;
+
+        firebase.database().ref("/users/" + firebase.auth().currentUser.uid).once("value").then((snap) => {
+            author = snap.child("name").val();
+            // console.log("author is: " + author);
+    
+            firebase.database().ref(`posts/${postId}/messages`).push({
+                message: content,
+                name: author
+            });
+        });
+    });
 }
 
 function lookupUserName(userId) {
@@ -253,22 +270,22 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
-document.getElementById("searchViewAll").onclick = function() {
+document.getElementById("searchViewAll").onclick = function () {
     populatePosts();
 }
 
-document.getElementById("searchEntertainment").onclick = function() {
+document.getElementById("searchEntertainment").onclick = function () {
     populatePosts("", "Entertainment");
 }
 
-document.getElementById("searchLearning").onclick = function() {
+document.getElementById("searchLearning").onclick = function () {
     populatePosts("", "Learning");
 }
 
-document.getElementById("searchOutdoor").onclick = function() {
+document.getElementById("searchOutdoor").onclick = function () {
     populatePosts("", "Outdoor");
 }
 
-document.getElementById("searchSports").onclick = function() {
+document.getElementById("searchSports").onclick = function () {
     populatePosts("", "Sports");
 }
