@@ -1,6 +1,8 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
+
+
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -21,7 +23,7 @@ function populatePosts(_postName="") {
         snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
             if (_postName !== "") {
-                if (postName.search(_postName) < -0) {
+                if (postName.search(_postName) < 0) {
                     return;
                 }
             }
@@ -54,6 +56,7 @@ function populatePosts(_postName="") {
             signUp.innerHTML = "Sign Up";
             signUp.onclick = function () {
                 let userId = '';
+                let userEmail = '';
                 let postRef = firebase.database().ref('posts');
                 firebase.auth().onAuthStateChanged(function(user) {
                     if (user) {
@@ -64,6 +67,7 @@ function populatePosts(_postName="") {
                         console.log(result);
                         firebase.database().ref("users").on("child_added", function(snapshot) {
                             if (snapshot.key === result) {
+                                userEmail = snapshot.key;
                                 userId = snapshot.val().name;
                             }
                         });
@@ -74,7 +78,9 @@ function populatePosts(_postName="") {
                         // Login required
                         alert("Please log in.")
                     } else {
-                        postRef.child(postName).child('users').push(userId);
+                        postRef.child(postName).child('users').update({
+                            [userId]: userEmail
+                        });
                     }
                 }, 300);
             }
