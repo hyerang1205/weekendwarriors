@@ -51,13 +51,12 @@ function switchButtons(grossKey) {
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
         $('#chat-modal').modal('show');
+        populateChatModal(grossKey);
     });
     parentDiv.appendChild(chatButton);
 }
 
 function signUp(postRef, userId) {
-    //postRef.child('users').child(userId).setValue(true);
-    // let postRef = firebase.database().ref('posts').child(childKey).child('users');
     console.log(postRef);
     postRef.child(userId).set(true);
 }
@@ -109,23 +108,9 @@ function populatePosts(_postName = "") {
             signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
-            signUpButton.onclick = function() {
+            signUpButton.onclick = function () {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
-                // firebase.auth().onAuthStateChanged(function(user) {
-                //     if (user) {
-                //         var email = user.email;
-                //         console.log(email);
-                //         let re = /(\w+)[@]my[.]bcit[.]ca/;
-                //         let result = re.exec(email)[1];
-                //         console.log(result);
-                //         firebase.database().ref("users").on("child_added", function(snapshot) {
-                //             if (snapshot.key === result) {
-                //                 userId = snapshot.val().name;
-                //             }
-                //         });
-                //     }
-                // });
                 setTimeout(function () {
                     if (userId === "") {
                         // Login required
@@ -149,19 +134,33 @@ function populatePosts(_postName = "") {
     });
 }
 
+function populateChatModal(postId) {
+    const messages = getMessages(postId);
+    const chatBody = document.getElementById("chat-body");
+    chatBody.innerHTML = "";
+
+    messages.forEach((msg) => {
+        const chatMsg = createChatNode(msg.content, msg.author);
+        chatBody.appendChild(chatMsg);
+    });
+}
+
 function lookupUserName(userId) {
     let username;
     firebase.database().ref("/users/" + userId).once("value").then((snap) => {
         username = snap.child("name").val();
+        return username;
     });
-
-    return username;
 }
 
 function getMessages(postId) {
     let posts = [];
     // TODO
     firebase.database().ref("/posts/" + postId + "/messages")
+    const msg = {
+        author: "author",
+        content: "text"
+    };
 }
 
 function createChatNode(content, author) {
