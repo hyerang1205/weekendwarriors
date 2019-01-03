@@ -30,6 +30,8 @@ function addPost() {
         signUp(postRef.child(key).child('users'), userId);
     });
 }
+
+
 function signUp(postRef, userId) {
     //postRef.child('users').child(userId).setValue(true);
     // let postRef = firebase.database().ref('posts').child(childKey).child('users');
