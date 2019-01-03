@@ -64,13 +64,21 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "") {
+function populatePosts(_postName = "", _category = "") {
     removePostsFromBoard();
+    console.log("_postName: ",_postName);
+    console.log("_category: ", _category);
     var postData = firebase.database().ref('posts').once('value', function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
             var postName = childSnapshot.child('name').val();
+            var category = childSnapshot.child('category').val();
             if (_postName !== "") {
                 if (postName.search(_postName) < -0) {
+                    return;
+                }
+            }
+            if (_category !== "") {
+                if (category.search(_category) < 0) {
                     return;
                 }
             }
@@ -78,7 +86,6 @@ function populatePosts(_postName = "") {
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
-            var category = childSnapshot.child('category').val();
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -206,6 +213,19 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
-document.getElementById("searchButton").onclick = function () {
-    populatePosts(document.getElementById("searchField").value);
+
+document.getElementById("searchEntertainment").onclick = function() {
+    populatePosts("", "Entertainment");
+}
+
+document.getElementById("searchLearning").onclick = function() {
+    populatePosts("", "Learning");
+}
+
+document.getElementById("searchOutdoor").onclick = function() {
+    populatePosts("", "Outdoor");
+}
+
+document.getElementById("searchSports").onclick = function() {
+    populatePosts("", "Sports");
 }
