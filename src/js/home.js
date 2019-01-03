@@ -1,8 +1,6 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
-
-
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -32,7 +30,6 @@ function addPost() {
         signUp(postRef.child(key).child('users'), userId);
     });
 }
-
 function signUp(postRef, userId) {
     //postRef.child('users').child(userId).setValue(true);
     // let postRef = firebase.database().ref('posts').child(childKey).child('users');
@@ -50,7 +47,7 @@ function populatePosts(_postName="", _tag="") {
             var postName = childSnapshot.child('name').val();
             var tag = "";
             if (_postName !== "") {
-                if (postName.search(_postName) < 0) {
+                if (postName.search(_postName) < -0) {
                     return;
                 }
             } else if (_tag !== "") {
@@ -58,6 +55,7 @@ function populatePosts(_postName="", _tag="") {
                     return;
                 }
             }
+            var grossKey = childSnapshot.key;
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             console.log(postName);
@@ -65,7 +63,7 @@ function populatePosts(_postName="", _tag="") {
             console.log(users);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
-            newDiv.id = postName;
+            newDiv.id = grossKey;
             let cardDiv = document.createElement('div');
             cardDiv.setAttribute("class", "card-body");
             let title = document.createElement('h5');
@@ -81,13 +79,12 @@ function populatePosts(_postName="", _tag="") {
             dateSmall.innerHTML = date;
             date.appendChild(dateSmall);*/
 
-            let signUp = document.createElement('button');
-            signUp.setAttribute("type", "button");
-            signUp.setAttribute("class", "btn btn-primary");
-            signUp.innerHTML = "Sign Up";
-            signUp.onclick = function () {
-                let userId = '';
-                let userEmail = '';
+            let signUpButton = document.createElement('button');
+            signUpButton.setAttribute("type", "button");
+            signUpButton.setAttribute("class", "btn btn-primary");
+            signUpButton.innerHTML = "Sign Up";
+            signUpButton.onclick = function () {
+                let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
                 // firebase.auth().onAuthStateChanged(function(user) {
                 //     if (user) {
@@ -106,11 +103,10 @@ function populatePosts(_postName="", _tag="") {
                 setTimeout(function() {
                     if (userId === "") {
                         // Login required
-                        alert("Please log in.")
+                        alert("Please log in.");
+                        window.location.assign("././index.html");
                     } else {
-                        postRef.child(postName).child('users').update({
-                            [userId]: userEmail
-                        });
+                        signUp(postRef.child(grossKey).child('users'), userId);
                     }
                 }, 300);
             }
@@ -118,7 +114,7 @@ function populatePosts(_postName="", _tag="") {
             cardDiv.appendChild(title);
             cardDiv.appendChild(postDescription);
             //cardDiv.appendChild(date);
-            cardDiv.appendChild(signUp);
+            cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
         });

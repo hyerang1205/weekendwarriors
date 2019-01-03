@@ -129,8 +129,19 @@
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
-          <div class="modal-body">
-            <button class="btn btn-primary" id="postChat" onclick="">Post</button>
+          <div class="modal-body" id="chat-body">
+            <div class="chat-box">
+              <p id="chat-text">Text</p>
+              <span class="name-left" id="chat-name">Name</span>
+            </div>
+          </div>
+          <div class="modal-footer">
+            <div class="input-group mb-3">
+              <input type="text" class="form-control" placeholder="" aria-label="" aria-describedby="basic-addon1">
+              <div class="input-group-append">
+                <button class="btn btn-outline-secondary" type="button">Post</button>
+              </div>
+            </div>
           </div>
         </div>
       </div>
