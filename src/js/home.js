@@ -1,28 +1,32 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
-
-firebase.auth().onAuthStateChanged(function(user) {
-    console.log("USER UID: " + user.uid)
-    console.log("USER DISPLAY NAME: " + user.displayName)
-    firebase.database().ref("users/" + user.uid).update({
-        "name": user.displayName,
-        "email": user.email
-    });
-});
-
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let slackChannelName = document.getElementById('channel-name').value;
     let userId = "testy";
     var postRef = firebase.database().ref("posts/");
-    postRef.child(postName).set({
-        channelName: slackChannelName,
+    //postRef.child(postName).set({
+        //name: postName,
+        //description: postDescr,
+        //users: userId
+    //});
+    let postData = {
         name: postName,
         description: postDescr,
-        users: userId
-    });
+        users: userId,
+        messages: {
+            fakeId: {
+                name: 'Weekend Warrior Admin',
+                message: 'Welcome to the chat room for ' + postName
+            }
+        }
+    };
+    let key = postRef.child('posts').push().key;
+    let updates = {};
+    updates['/posts/' + key] = postData;
+
+    return firebase.database().ref().update(updates);
 }
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName="") {
@@ -80,7 +84,12 @@ function populatePosts(_postName="") {
                     }
                 });
                 setTimeout(function() {
-                    postRef.child(postName).child('users').push(userId);
+                    if (userId === "") {
+                        // Login required
+                        alert("Please log in.")
+                    } else {
+                        postRef.child(postName).child('users').push(userId);
+                    }
                 }, 300);
             }
 
