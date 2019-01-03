@@ -25,13 +25,6 @@ function addPost() {
         description: postDescr,
         category: postCate,
         date: postDate,
-        // users: userId,
-        messages: {
-            fakeId: {
-                name: 'Weekend Warrior Admin',
-                message: 'Welcome to the chat room for ' + postName
-            }
-        }
     };
     var key = postRef.child('posts').push().key;
     let updates = {};
@@ -75,7 +68,7 @@ function signUp(postRef, userId) {
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName = "", _category = "") {
     removePostsFromBoard();
-    console.log("_postName: ",_postName);
+    console.log("_postName: ", _postName);
     console.log("_category: ", _category);
     var postData = firebase.database().ref('posts').once('value', function (snapshot) {
         snapshot.forEach(function (childSnapshot) {
@@ -184,6 +177,23 @@ function populateChatModal(postId) {
         });
     });
 
+    const INPUT = document.getElementById("chat-input");
+    const POST_BUTTON = document.getElementById("chat-button");
+
+    POST_BUTTON.addEventListener("click", () => {
+        const content = INPUT.value;
+        let author;
+
+        firebase.database().ref("/users/" + firebase.auth().currentUser.uid).once("value").then((snap) => {
+            author = snap.child("name").val();
+            // console.log("author is: " + author);
+    
+            firebase.database().ref(`posts/${postId}/messages`).push({
+                message: content,
+                name: author
+            });
+        });
+    });
 }
 
 function lookupUserName(userId) {
@@ -253,26 +263,37 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
+let searchResultMessage = document.getElementById("searchResultMessage");
+
 document.getElementById("searchButton").onclick = function() {
     populatePosts(document.getElementById("searchField").value);
+    searchResultMessage.innerHTML = "Search results for " + document.getElementById("searchField").value;
+    if (document.getElementById("searchField").value === "") {
+        searchResultMessage.innerHTML = "";
+    }
 }
 
 document.getElementById("searchViewAll").onclick = function() {
     populatePosts();
+    searchResultMessage.innerHTML = "";
 }
 
-document.getElementById("searchEntertainment").onclick = function() {
+document.getElementById("searchEntertainment").onclick = function () {
     populatePosts("", "Entertainment");
+    searchResultMessage.innerHTML = "Search results for Entertainment";
 }
 
-document.getElementById("searchLearning").onclick = function() {
+document.getElementById("searchLearning").onclick = function () {
     populatePosts("", "Learning");
+    searchResultMessage.innerHTML = "Search results for Learning";
 }
 
-document.getElementById("searchOutdoor").onclick = function() {
+document.getElementById("searchOutdoor").onclick = function () {
     populatePosts("", "Outdoor");
+    searchResultMessage.innerHTML = "Search results for Outdoor";
 }
 
-document.getElementById("searchSports").onclick = function() {
+document.getElementById("searchSports").onclick = function () {
     populatePosts("", "Sports");
+    searchResultMessage.innerHTML = "Search results for Sports";
 }
