@@ -4,11 +4,7 @@ a:hover{
 body{
     background-color: #ebe6e6;
 }
-.card-columns{
-    margin-top: 2em;
-    margin-right: 1em;
-    margin-left: 1em;
-}
+
 .rightFloat{
     float:right !important;
     margin-bottom: 1em;
