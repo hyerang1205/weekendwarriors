@@ -8,3 +8,21 @@ body{
 #posts{
   padding: 1em;
 }
+
+.chat-box {
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 0.63em;
+  margin: 0.63em 0.63em;
+}
+
+.chat-box::after {
+  content: "";
+  clear: both;
+  display: table;
+}
+
+.name-left {
+  color: #999;
+}
