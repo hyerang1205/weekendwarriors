@@ -11,7 +11,7 @@ function searchByChannelName() {
     ref.on("child_added", function (snapshot) {
         tempChannelName = snapshot.val().channelName;
         if (tempChannelName.search(channelName) > -1) {
-            console.log(tempChannelName);
+            alert(tempChannelName);
         }
     });
 }

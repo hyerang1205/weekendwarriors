@@ -21,8 +21,10 @@ function signUp() {
             firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function (error) {
                 var errorMessage = error.message;
             });
-            // Redirect to main.html.
-            redirectToHomePage();
+
+            setTimeout(function() {
+                redirectToHomePage();
+            }, 500);
         }
     } else {
         // Please fill in the blanks.
