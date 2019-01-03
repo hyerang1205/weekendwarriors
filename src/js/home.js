@@ -270,26 +270,37 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
+let searchResultMessage = document.getElementById("searchResultMessage");
+
 document.getElementById("searchButton").onclick = function() {
     populatePosts(document.getElementById("searchField").value);
+    searchResultMessage.innerHTML = "Search results for " + document.getElementById("searchField").value;
+    if (document.getElementById("searchField").value === "") {
+        searchResultMessage.innerHTML = "";
+    }
 }
 
 document.getElementById("searchViewAll").onclick = function() {
     populatePosts();
+    searchResultMessage.innerHTML = "";
 }
 
 document.getElementById("searchEntertainment").onclick = function () {
     populatePosts("", "Entertainment");
+    searchResultMessage.innerHTML = "Search results for Entertainment";
 }
 
 document.getElementById("searchLearning").onclick = function () {
     populatePosts("", "Learning");
+    searchResultMessage.innerHTML = "Search results for Learning";
 }
 
 document.getElementById("searchOutdoor").onclick = function () {
     populatePosts("", "Outdoor");
+    searchResultMessage.innerHTML = "Search results for Outdoor";
 }
 
 document.getElementById("searchSports").onclick = function () {
     populatePosts("", "Sports");
+    searchResultMessage.innerHTML = "Search results for Sports";
 }
