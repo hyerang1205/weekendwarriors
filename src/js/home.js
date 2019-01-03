@@ -63,9 +63,25 @@ function populatePosts(_postName="") {
             signUp.setAttribute("class", "btn btn-primary");
             signUp.innerHTML = "Sign Up";
             signUp.onclick = function () {
-                let userId = 'hello';
+                let userId = '';
                 let postRef = firebase.database().ref('posts');
-                postRef.child(postName).child('users').push(userId);
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        var email = user.email;
+                        console.log(email);
+                        let re = /(\w+)[@]my[.]bcit[.]ca/;
+                        let result = re.exec(email)[1];
+                        console.log(result);
+                        firebase.database().ref("users").on("child_added", function(snapshot) {
+                            if (snapshot.key === result) {
+                                userId = snapshot.val().name;
+                            }
+                        });
+                    }
+                });
+                setTimeout(function() {
+                    postRef.child(postName).child('users').push(userId);
+                }, 300);
             }
 
             cardDiv.appendChild(title);
@@ -76,6 +92,10 @@ function populatePosts(_postName="") {
             document.getElementById('posts').appendChild(newDiv);
         });
     });
+}
+
+function getCurrentUser() {
+
 }
 
 function removePostsFromBoard() {
