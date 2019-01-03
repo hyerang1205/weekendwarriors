@@ -25,5 +25,3 @@ function searchByName(name) {
         }
     });
 }
-
-document.getElementById("searchButton").onclick = searchByChannelName;
