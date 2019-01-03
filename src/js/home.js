@@ -4,7 +4,7 @@ $('#datepicker').datepicker({
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let userId = "testy";
+    var userId = firebase.auth().currentUser.uid;
     var postRef = firebase.database().ref("posts/");
     //postRef.child(postName).set({
         //name: postName,
