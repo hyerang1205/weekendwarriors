@@ -305,6 +305,7 @@ document.getElementById("searchMyEvent").onclick = function () {
             var uid = user.uid;
             console.log(uid);
             populatePosts("", "", uid);
+            searchResultMessage.innerHTML = "My Events"
         }
     });
 }
