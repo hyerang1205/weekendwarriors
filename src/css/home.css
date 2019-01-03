@@ -6,4 +6,6 @@ body{
 }
 .card-columns{
     margin-top: 2em;
+    margin-right: 1em;
+    margin-left: 1em;
 }
