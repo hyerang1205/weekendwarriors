@@ -1,16 +1,6 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
-
-firebase.auth().onAuthStateChanged(function(user) {
-    console.log("USER UID: " + user.uid)
-    console.log("USER DISPLAY NAME: " + user.displayName)
-    firebase.database().ref("users/" + user.uid).update({
-        "name": user.displayName,
-        "email": user.email
-    });
-});
-
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -80,7 +70,12 @@ function populatePosts(_postName="") {
                     }
                 });
                 setTimeout(function() {
-                    postRef.child(postName).child('users').push(userId);
+                    if (userId === "") {
+                        // Login required
+                        alert("Please log in.")
+                    } else {
+                        postRef.child(postName).child('users').push(userId);
+                    }
                 }, 300);
             }
 
