@@ -253,6 +253,10 @@ firebase.auth().onAuthStateChanged(function (user) {
 
 document.onload = populatePosts();
 
+document.getElementById("searchButton").onclick = function() {
+    populatePosts(document.getElementById("searchField").value);
+}
+
 document.getElementById("searchViewAll").onclick = function() {
     populatePosts();
 }
