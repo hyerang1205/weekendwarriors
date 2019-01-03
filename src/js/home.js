@@ -167,8 +167,65 @@ function populatePosts(_postName = "", _category = "", _uid = "") {
             cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
+
+            // console.log(`post ${grossKey} has users ${users.toString()}`);
+            for (let key in users) {
+                if (users.hasOwnProperty(key)) {
+                    console.log("user: " + key);
+                    if (firebase.auth().currentUser.uid === key) {
+                        switchButtons(grossKey);
+                    }
+                }
+            }
+
+            const messagesRef = firebase.database().ref(`/posts/${grossKey}/messages`);
         });
     });
+}
+
+function populateChatModal(postId) {
+    console.log("populating chat messages for post #" + postId);
+    let posts = [];
+
+    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            const msgObj = {
+                author: childSnapshot.child('name').val(),
+                content: childSnapshot.child('message').val()
+            };
+            posts.push(msgObj);
+        });
+    }).then(() => {
+        const chatBody = document.getElementById("chat-body");
+        chatBody.innerHTML = "";
+
+        posts.forEach((msg) => {
+            const chatMsg = createChatNode(msg.content, msg.author);
+            console.log("HTML node for message: " + chatMsg);
+
+            chatBody.appendChild(chatMsg);
+        });
+    });
+
+    const INPUT = document.getElementById("chat-input");
+    const POST_BUTTON = document.getElementById("chat-button");
+
+    POST_BUTTON.onclick = () => {
+        const content = INPUT.value;
+        let author;
+
+        firebase.database().ref("/users/" + firebase.auth().currentUser.uid).once("value").then((snap) => {
+            author = snap.child("name").val();
+            // console.log("author is: " + author);
+    
+            firebase.database().ref(`posts/${postId}/messages`).push({
+                message: content,
+                name: author
+            });
+        });
+
+        populateChatModal(postId);
+    }
 }
 
 function lookupUserName(userId) {
