@@ -2674,37 +2674,37 @@ fieldset:disabled a.btn {
 }
 
 .btn-outline-success {
-  color: #28a745;
+  color: white;
   background-color: transparent;
   background-image: none;
-  border-color: #28a745;
+  border-color: white;
 }
 
 .btn-outline-success:hover {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-outline-success:focus, .btn-outline-success.focus {
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
 .btn-outline-success.disabled, .btn-outline-success:disabled {
-  color: #28a745;
+  color: rgba(255, 255, 255, 0.5);
   background-color: transparent;
 }
 
 .btn-outline-success:not(:disabled):not(.disabled):active, .btn-outline-success:not(:disabled):not(.disabled).active,
 .show > .btn-outline-success.dropdown-toggle {
   color: #fff;
-  background-color: #28a745;
-  border-color: #28a745;
+  background-color: rgba(255, 255, 255, 0.5);
+  border-color: rgba(255, 255, 255, 0.5);
 }
 
 .btn-outline-success:not(:disabled):not(.disabled):active:focus, .btn-outline-success:not(:disabled):not(.disabled).active:focus,
 .show > .btn-outline-success.dropdown-toggle:focus {
-  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.5);
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.5);
 }
 
 .btn-outline-info {
@@ -4377,9 +4377,9 @@ input[type="button"].btn-block {
   flex-direction: column;
   min-width: 0;
   word-wrap: break-word;
-  background-color: #fff;
+  background-color: rgba(255, 255, 255, 0.3);
   background-clip: border-box;
-  border: 1px solid rgba(0, 0, 0, 0.125);
+  border: 1px solid rgba(255, 255, 255, 0.5)
   border-radius: 0.25rem;
 }
 
