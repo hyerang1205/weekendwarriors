@@ -4,6 +4,8 @@ $('#datepicker').datepicker({
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
+    let postCate = document.getElementById('post-category').value;
+    let postDate = document.getElementById('datepicker').value;
     var userId = firebase.auth().currentUser.uid;
     var postRef = firebase.database().ref("posts/");
     //postRef.child(postName).set({
@@ -14,6 +16,8 @@ function addPost() {
     let postData = {
         name: postName,
         description: postDescr,
+        category: postCate,
+        date: postDate,
         // users: userId,
         messages: {
             fakeId: {
@@ -37,9 +41,9 @@ function switchButtons(grossKey) {
     const button = parentDiv.getElementsByTagName("button")[0];
 
     parentDiv.removeChild(button);
-    
+
     const chatButton = document.createElement("button");
-    chatButton.innerHTML = 'Chat!'
+    chatButton.innerHTML = 'Chat'
     chatButton.setAttribute("type", "button");
     chatButton.setAttribute("class", "btn btn-primary");
     //chatButton.setAttribute("data-toggle", "modal");
@@ -60,18 +64,13 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName="", _tag="") {
+function populatePosts(_postName="") {
     removePostsFromBoard();
     var postData = firebase.database().ref('posts').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
-            var tag = "";
             if (_postName !== "") {
                 if (postName.search(_postName) < -0) {
-                    return;
-                }
-            } else if (_tag !== "") {
-                if (tag !== _tag) {
                     return;
                 }
             }
@@ -101,8 +100,8 @@ function populatePosts(_postName="", _tag="") {
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
-            signUpButton.setAttribute("class", "btn btn-primary rightFloat");
-            signUpButton.innerHTML = "Sign Up";
+            signUpButton.setAttribute("class", "btn btn-primary");
+            signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
             signUpButton.onclick = function () {
                 let userId = firebase.auth().currentUser.uid;
