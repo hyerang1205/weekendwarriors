@@ -88,6 +88,7 @@ function populatePosts(_postName = "", _category = "") {
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
+            // var messages = childSnapshot.ref('messages');
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -149,6 +150,8 @@ function populatePosts(_postName = "", _category = "") {
                     }
                 }
             }
+
+            const messagesRef = firebase.database().ref(`/posts/${grossKey}/messages`);
         });
     });
 }
@@ -180,7 +183,7 @@ function populateChatModal(postId) {
     const INPUT = document.getElementById("chat-input");
     const POST_BUTTON = document.getElementById("chat-button");
 
-    POST_BUTTON.addEventListener("click", () => {
+    POST_BUTTON.onclick = () => {
         const content = INPUT.value;
         let author;
 
@@ -193,7 +196,9 @@ function populateChatModal(postId) {
                 name: author
             });
         });
-    });
+
+        populateChatModal(postId);
+    }
 }
 
 function lookupUserName(userId) {
