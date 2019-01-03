@@ -4,15 +4,29 @@ $('#datepicker').datepicker({
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let slackChannelName = document.getElementById('channel-name').value;
     let userId = "testy";
     var postRef = firebase.database().ref("posts/");
-    postRef.child(postName).set({
-        channelName: slackChannelName,
+    //postRef.child(postName).set({
+        //name: postName,
+        //description: postDescr,
+        //users: userId
+    //});
+    let postData = {
         name: postName,
         description: postDescr,
-        users: userId
-    });
+        users: userId,
+        messages: {
+            fakeId: {
+                name: 'WeekendWarriorAdmin',
+                message: 'Welcome to the chat room for ' + postName
+            }
+        }
+    };
+    let key = postRef.child('posts').push().key;
+    let updates = {};
+    updates['/posts/' + key] = postData;
+
+    return firebase.database().ref().update(updates);
 }
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName="") {
