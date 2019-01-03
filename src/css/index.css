@@ -1,5 +1,10 @@
+body {
+ background-image: url('../img/background.png');
+ background-color: #cccccc;
+}
 #signIn, #signUp {
-
+background-color: rgba(255, 255, 255, 0.5);
+border-radius: 5%;
         position: relative;
         left:36%;
         top:6em;
@@ -26,18 +31,10 @@
 }
 
 
-/* #first{
-    position: relative;
-    top: 20em;
-    background-color: blue;
-} */
-
 #signIn{
-    border: solid 1px black;
     padding: 3em !important;
 }
 #signUp{
     display: none;
-        border: solid 1px black;
     padding: 2em !important;
 }
