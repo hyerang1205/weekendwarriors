@@ -43,13 +43,18 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName="") {
+function populatePosts(_postName="", _tag="") {
     removePostsFromBoard();
     var postData = firebase.database().ref('posts').once('value', function(snapshot) {
         snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
+            var tag = "";
             if (_postName !== "") {
                 if (postName.search(_postName) < 0) {
+                    return;
+                }
+            } else if (_tag !== "") {
+                if (tag !== _tag) {
                     return;
                 }
             }
