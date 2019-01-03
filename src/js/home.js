@@ -1,28 +1,32 @@
 $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
-
-firebase.auth().onAuthStateChanged(function(user) {
-    console.log("USER UID: " + user.uid)
-    console.log("USER DISPLAY NAME: " + user.displayName)
-    firebase.database().ref("users/" + user.uid).update({
-        "name": user.displayName,
-        "email": user.email
-    });
-});
-
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let slackChannelName = document.getElementById('channel-name').value;
-    let userId = "testy";
+    var userId = firebase.auth().currentUser.uid;
     var postRef = firebase.database().ref("posts/");
-    postRef.child(postName).set({
-        channelName: slackChannelName,
+    //postRef.child(postName).set({
+        //name: postName,
+        //description: postDescr,
+        //users: userId
+    //});
+    let postData = {
         name: postName,
         description: postDescr,
-        users: userId
-    });
+        users: userId,
+        messages: {
+            fakeId: {
+                name: 'Weekend Warrior Admin',
+                message: 'Welcome to the chat room for ' + postName
+            }
+        }
+    };
+    let key = postRef.child('posts').push().key;
+    let updates = {};
+    updates['/posts/' + key] = postData;
+
+    return firebase.database().ref().update(updates);
 }
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName="") {
@@ -62,16 +66,32 @@ function populatePosts(_postName="") {
             signUp.setAttribute("type", "button");
             signUp.setAttribute("class", "btn btn-primary");
             signUp.innerHTML = "Sign Up";
-
-            signUp.addEventListener("click", () => {
-                let userId = 'hello';
+            signUp.onclick = function () {
+                let userId = '';
                 let postRef = firebase.database().ref('posts');
-                postRef.child(postName).child('users').push(userId);
-            });
-
-            signUp.addEventListener("click", () => {
-                
-            });
+                firebase.auth().onAuthStateChanged(function(user) {
+                    if (user) {
+                        var email = user.email;
+                        console.log(email);
+                        let re = /(\w+)[@]my[.]bcit[.]ca/;
+                        let result = re.exec(email)[1];
+                        console.log(result);
+                        firebase.database().ref("users").on("child_added", function(snapshot) {
+                            if (snapshot.key === result) {
+                                userId = snapshot.val().name;
+                            }
+                        });
+                    }
+                });
+                setTimeout(function() {
+                    if (userId === "") {
+                        // Login required
+                        alert("Please log in.")
+                    } else {
+                        postRef.child(postName).child('users').push(userId);
+                    }
+                }, 300);
+            }
 
             cardDiv.appendChild(title);
             cardDiv.appendChild(postDescription);
