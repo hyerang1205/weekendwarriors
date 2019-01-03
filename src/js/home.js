@@ -2,6 +2,12 @@ $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
 
+// $('#myModal').modal('show');
+//
+//    $('#myBtn').on('click', function(){
+//      $('#myModal').modal('show');
+//    });
+
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
@@ -33,8 +39,11 @@ function addPost() {
 
     firebase.database().ref().update(updates).then(() => {
         signUp(postRef.child(key).child('users'), userId);
-        switchButtons(key);
+        document.location.reload(true);
+        // switchButtons(key);
     });
+
+    // $('#createEvent').modal('hide');
 }
 
 function switchButtons(grossKey) {
@@ -142,14 +151,29 @@ function populatePosts(_postName = "", _category = "") {
 }
 
 function populateChatModal(postId) {
-    const messages = getMessages(postId);
-    const chatBody = document.getElementById("chat-body");
-    chatBody.innerHTML = "";
+    console.log("populating chat messages for post #" + postId);
+    let posts = [];
 
-    messages.forEach((msg) => {
-        const chatMsg = createChatNode(msg.content, msg.author);
-        chatBody.appendChild(chatMsg);
+    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            const msgObj = {
+                author: childSnapshot.child('name').val(),
+                content: childSnapshot.child('message').val()
+            };
+            posts.push(msgObj);
+        });
+    }).then(() => {
+        const chatBody = document.getElementById("chat-body");
+        chatBody.innerHTML = "";
+
+        posts.forEach((msg) => {
+            const chatMsg = createChatNode(msg.content, msg.author);
+            console.log("HTML node for message: " + chatMsg);
+
+            chatBody.appendChild(chatMsg);
+        });
     });
+
 }
 
 function lookupUserName(userId) {
@@ -162,12 +186,18 @@ function lookupUserName(userId) {
 
 function getMessages(postId) {
     let posts = [];
-    // TODO
-    firebase.database().ref("/posts/" + postId + "/messages")
-    const msg = {
-        author: "author",
-        content: "text"
-    };
+
+    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
+        snapshot.forEach(function (childSnapshot) {
+            const msgObj = {
+                author: childSnapshot.child('name').val(),
+                content: childSnapshot.child('message').val()
+            };
+            posts.push(msgObj);
+        });
+    }).then(() => {
+        return posts;
+    });
 }
 
 function createChatNode(content, author) {
