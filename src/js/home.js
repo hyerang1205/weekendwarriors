@@ -30,7 +30,6 @@ function addPost() {
         signUp(postRef.child(key).child('users'), userId);
     });
 }
-
 function signUp(postRef, userId) {
     //postRef.child('users').child(userId).setValue(true);
     // let postRef = firebase.database().ref('posts').child(childKey).child('users');
@@ -51,6 +50,7 @@ function populatePosts(_postName="") {
                     return;
                 }
             }
+            var grossKey = childSnapshot.key;
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             console.log(postName);
@@ -58,7 +58,7 @@ function populatePosts(_postName="") {
             console.log(users);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
-            newDiv.id = postName;
+            newDiv.id = grossKey;
             let cardDiv = document.createElement('div');
             cardDiv.setAttribute("class", "card-body");
             let title = document.createElement('h5');
@@ -74,12 +74,12 @@ function populatePosts(_postName="") {
             dateSmall.innerHTML = date;
             date.appendChild(dateSmall);*/
 
-            let signUp = document.createElement('button');
-            signUp.setAttribute("type", "button");
-            signUp.setAttribute("class", "btn btn-primary");
-            signUp.innerHTML = "Sign Up";
-            signUp.onclick = function () {
-                let userId = '';
+            let signUpButton = document.createElement('button');
+            signUpButton.setAttribute("type", "button");
+            signUpButton.setAttribute("class", "btn btn-primary");
+            signUpButton.innerHTML = "Sign Up";
+            signUpButton.onclick = function () {
+                let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
                 // firebase.auth().onAuthStateChanged(function(user) {
                 //     if (user) {
@@ -98,9 +98,10 @@ function populatePosts(_postName="") {
                 setTimeout(function() {
                     if (userId === "") {
                         // Login required
-                        alert("Please log in.")
+                        alert("Please log in.");
+                        window.location.assign("././index.html");
                     } else {
-                        postRef.child(postName).child('users').push(userId);
+                        signUp(postRef.child(grossKey).child('users'), userId);
                     }
                 }, 300);
             }
@@ -108,7 +109,7 @@ function populatePosts(_postName="") {
             cardDiv.appendChild(title);
             cardDiv.appendChild(postDescription);
             //cardDiv.appendChild(date);
-            cardDiv.appendChild(signUp);
+            cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
         });
