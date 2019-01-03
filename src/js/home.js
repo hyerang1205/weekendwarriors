@@ -11,7 +11,7 @@ $('#datepicker').datepicker({
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let postCate = document.getElementById('post-category').value;
+    let postCategory = document.getElementById('post-category').value;
     let postDate = document.getElementById('datepicker').value;
     var userId = firebase.auth().currentUser.uid;
     var postRef = firebase.database().ref("posts/");
@@ -23,7 +23,7 @@ function addPost() {
     let postData = {
         name: postName,
         description: postDescr,
-        category: postCate,
+        category: postCategory,
         date: postDate,
         // users: userId,
         messages: {
@@ -60,12 +60,13 @@ function switchButtons(grossKey) {
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
         $('#chat-modal').modal('show');
-        populateChatModal(grossKey);
     });
     parentDiv.appendChild(chatButton);
 }
 
 function signUp(postRef, userId) {
+    //postRef.child('users').child(userId).setValue(true);
+    // let postRef = firebase.database().ref('posts').child(childKey).child('users');
     console.log(postRef);
     postRef.child(userId).set(true);
 }
@@ -73,21 +74,13 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "", _category = "") {
+function populatePosts(_postName = "") {
     removePostsFromBoard();
-    console.log("_postName: ", _postName);
-    console.log("_category: ", _category);
-    var postData = firebase.database().ref('posts').once('value', function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
+    var postData = firebase.database().ref('posts').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
-            var category = childSnapshot.child('category').val();
             if (_postName !== "") {
                 if (postName.search(_postName) < -0) {
-                    return;
-                }
-            }
-            if (_category !== "") {
-                if (category.search(_category) < 0) {
                     return;
                 }
             }
@@ -95,6 +88,7 @@ function populatePosts(_postName = "", _category = "") {
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
+            var category = childSnapshot.child('category').val();
             console.log(postName);
             console.log(description);
             console.log(users);
@@ -106,28 +100,42 @@ function populatePosts(_postName = "", _category = "") {
             let title = document.createElement('h5');
             title.setAttribute("class", "card-title");
             title.innerHTML = postName;
+
+            let postCategory = document.createElement('span');
+            postCategory.setAttribute("class", "text-muted reloacation rightFloat");
+            postCategory.innerHTML = category;
+
             let postDescription = document.createElement('p');
             postDescription.setAttribute("class", "card-text");
             postDescription.innerHTML = description;
 
             let postDate = document.createElement('small');
             postDate.setAttribute("class", "text-muted");
-            postDate.innerHTML = date;
-
-
-            let postCate = document.createElement('span');
-            postCate.setAttribute("class", "text-muted");
-            postCate.innerHTML = category;
+            postDate.innerHTML = "~ " + date;
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
             signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
-            signUpButton.onclick = function () {
+            signUpButton.onclick = function() {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
-                setTimeout(function () {
+                // firebase.auth().onAuthStateChanged(function(user) {
+                //     if (user) {
+                //         var email = user.email;
+                //         console.log(email);
+                //         let re = /(\w+)[@]my[.]bcit[.]ca/;
+                //         let result = re.exec(email)[1];
+                //         console.log(result);
+                //         firebase.database().ref("users").on("child_added", function(snapshot) {
+                //             if (snapshot.key === result) {
+                //                 userId = snapshot.val().name;
+                //             }
+                //         });
+                //     }
+                // });
+                setTimeout(function() {
                     if (userId === "") {
                         // Login required
                         alert("Please log in.");
@@ -140,65 +148,12 @@ function populatePosts(_postName = "", _category = "") {
             }
 
             cardDiv.appendChild(title);
-            cardDiv.appendChild(postCate);
+            cardDiv.appendChild(postCategory);
             cardDiv.appendChild(postDescription);
             cardDiv.appendChild(postDate);
             cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
-
-            // console.log(`post ${grossKey} has users ${users.toString()}`);
-            for (let key in users) {
-                if (users.hasOwnProperty(key)) {
-                    console.log("user: " + key);
-                    if (firebase.auth().currentUser.uid === key) {
-                        switchButtons(grossKey);
-                    }
-                }
-            }
-        });
-    });
-}
-
-function populateChatModal(postId) {
-    console.log("populating chat messages for post #" + postId);
-    let posts = [];
-
-    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-            const msgObj = {
-                author: childSnapshot.child('name').val(),
-                content: childSnapshot.child('message').val()
-            };
-            posts.push(msgObj);
-        });
-    }).then(() => {
-        const chatBody = document.getElementById("chat-body");
-        chatBody.innerHTML = "";
-
-        posts.forEach((msg) => {
-            const chatMsg = createChatNode(msg.content, msg.author);
-            console.log("HTML node for message: " + chatMsg);
-
-            chatBody.appendChild(chatMsg);
-        });
-    });
-
-    const INPUT = document.getElementById("chat-input");
-    const POST_BUTTON = document.getElementById("chat-button");
-
-    POST_BUTTON.addEventListener("click", () => {
-        const content = INPUT.value;
-        let author;
-
-        firebase.database().ref("/users/" + firebase.auth().currentUser.uid).once("value").then((snap) => {
-            author = snap.child("name").val();
-            // console.log("author is: " + author);
-    
-            firebase.database().ref(`posts/${postId}/messages`).push({
-                message: content,
-                name: author
-            });
         });
     });
 }
@@ -207,24 +162,15 @@ function lookupUserName(userId) {
     let username;
     firebase.database().ref("/users/" + userId).once("value").then((snap) => {
         username = snap.child("name").val();
-        return username;
     });
+
+    return username;
 }
 
 function getMessages(postId) {
     let posts = [];
-
-    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-            const msgObj = {
-                author: childSnapshot.child('name').val(),
-                content: childSnapshot.child('message').val()
-            };
-            posts.push(msgObj);
-        });
-    }).then(() => {
-        return posts;
-    });
+    // TODO
+    firebase.database().ref("/posts/" + postId + "/messages")
 }
 
 function createChatNode(content, author) {
@@ -258,7 +204,7 @@ function removePostsFromBoard() {
 }
 
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         // User is signed in.
         var displayName = user.displayName;
@@ -272,24 +218,4 @@ document.onload = populatePosts();
 
 document.getElementById("searchButton").onclick = function() {
     populatePosts(document.getElementById("searchField").value);
-}
-
-document.getElementById("searchViewAll").onclick = function() {
-    populatePosts();
-}
-
-document.getElementById("searchEntertainment").onclick = function () {
-    populatePosts("", "Entertainment");
-}
-
-document.getElementById("searchLearning").onclick = function () {
-    populatePosts("", "Learning");
-}
-
-document.getElementById("searchOutdoor").onclick = function () {
-    populatePosts("", "Outdoor");
-}
-
-document.getElementById("searchSports").onclick = function () {
-    populatePosts("", "Sports");
 }
