@@ -2,9 +2,15 @@ $('#datepicker').datepicker({
     uiLibrary: 'bootstrap4'
 });
 
+<<<<<<< HEAD
+firebase.auth().onAuthStateChanged(function (user) {
+    //   console.log(user.uid)
+    //   console.log(user.displayName)
+=======
 firebase.auth().onAuthStateChanged(function(user) {
     console.log(user.uid)
     console.log(user.displayName)
+>>>>>>> d97140b22567169727f2235decf9802d08d7a1e4
     firebase.database().ref("users/" + user.uid).update({
         "name": user.displayName,
         "email": user.email
