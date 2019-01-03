@@ -3,8 +3,8 @@ $('#datepicker').datepicker({
 });
 
 firebase.auth().onAuthStateChanged(function(user) {
-    console.log(user.uid)
-    console.log(user.displayName)
+    console.log("USER UID: " + user.uid)
+    console.log("USER DISPLAY NAME: " + user.displayName)
     firebase.database().ref("users/" + user.uid).update({
         "name": user.displayName,
         "email": user.email
@@ -94,9 +94,14 @@ function populatePosts(_postName="") {
     });
 }
 
-function getCurrentUser() {
-
-}
+document.getElementById("signOutButton").addEventListener("click", () => {
+    firebase
+    .auth()
+    .signOut()
+    .then(() => {
+      window.location.assign("./index.html");
+    });
+});
 
 function removePostsFromBoard() {
     $(".card").remove();
