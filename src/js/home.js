@@ -1,6 +1,6 @@
-/*$('#datetimepicker').data("DateTimePicker").function () {
-$('#datetimepicker1').datetimepicker();
-}*/
+$('#datepicker').datepicker({
+           uiLibrary: 'bootstrap4'
+       });
 
 firebase.auth().onAuthStateChanged(function (user) {
   console.log(user.uid)
