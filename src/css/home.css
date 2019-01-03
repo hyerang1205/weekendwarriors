@@ -10,6 +10,10 @@ body{
     margin-left: 1em;
 }
 
+#posts{
+  margin: 1em;
+}
+
 .chat-box {
   border: 2px solid #dedede;
   background-color: #f1f1f1;
