@@ -77,9 +77,10 @@ function addUserToJson(userName, uid) {
     // let re = /(\w+)[@]my[.]bcit[.]ca/;
     // let result = re.exec(email)[1];
     console.log(`NEW USER UID: ${uid}\n NEW USER NAME: ${userName}`);
-    let ref = firebase.database().ref("users/" + uid).set({
-        name: userName
-    });
+    // let ref = firebase.database().ref("users/" + uid).set({
+    //     name: userName
+    // });
+    // let ref = firebase
     // ref.update({
     //     [uid]: {
     //         name: userName
