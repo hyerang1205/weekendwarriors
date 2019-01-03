@@ -16,7 +16,7 @@ function addPost() {
     let postData = {
         name: postName,
         description: postDescr,
-        users: userId,
+        // users: userId,
         messages: {
             fakeId: {
                 name: 'Weekend Warrior Admin',
@@ -24,12 +24,24 @@ function addPost() {
             }
         }
     };
-    let key = postRef.child('posts').push().key;
+    var key = postRef.child('posts').push().key;
     let updates = {};
     updates['/posts/' + key] = postData;
 
-    return firebase.database().ref().update(updates);
+    firebase.database().ref().update(updates).then(() => {
+        signUp(postRef.child(key).child('users'), userId);
+    });
 }
+
+function signUp(postRef, userId) {
+    //postRef.child('users').child(userId).setValue(true);
+    // let postRef = firebase.database().ref('posts').child(childKey).child('users');
+    console.log(postRef);
+    postRef.child(userId).set(true);
+}
+
+
+
 //document.getElementById('createPost').onclick = addPost;
 function populatePosts(_postName="") {
     removePostsFromBoard();
@@ -72,21 +84,20 @@ function populatePosts(_postName="") {
                 let userId = '';
                 let userEmail = '';
                 let postRef = firebase.database().ref('posts');
-                firebase.auth().onAuthStateChanged(function(user) {
-                    if (user) {
-                        var email = user.email;
-                        console.log(email);
-                        let re = /(\w+)[@]my[.]bcit[.]ca/;
-                        let result = re.exec(email)[1];
-                        console.log(result);
-                        firebase.database().ref("users").on("child_added", function(snapshot) {
-                            if (snapshot.key === result) {
-                                userEmail = snapshot.key;
-                                userId = snapshot.val().name;
-                            }
-                        });
-                    }
-                });
+                // firebase.auth().onAuthStateChanged(function(user) {
+                //     if (user) {
+                //         var email = user.email;
+                //         console.log(email);
+                //         let re = /(\w+)[@]my[.]bcit[.]ca/;
+                //         let result = re.exec(email)[1];
+                //         console.log(result);
+                //         firebase.database().ref("users").on("child_added", function(snapshot) {
+                //             if (snapshot.key === result) {
+                //                 userId = snapshot.val().name;
+                //             }
+                //         });
+                //     }
+                // });
                 setTimeout(function() {
                     if (userId === "") {
                         // Login required
