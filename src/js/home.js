@@ -146,6 +146,16 @@ function populatePosts(_postName = "", _category = "") {
             cardDiv.appendChild(signUpButton);
             newDiv.appendChild(cardDiv)
             document.getElementById('posts').appendChild(newDiv);
+
+            // console.log(`post ${grossKey} has users ${users.toString()}`);
+            for (let key in users) {
+                if (users.hasOwnProperty(key)) {
+                    console.log("user: " + key);
+                    if (firebase.auth().currentUser.uid === key) {
+                        switchButtons(grossKey);
+                    }
+                }
+            }
         });
     });
 }
