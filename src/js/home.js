@@ -56,6 +56,11 @@ function populatePosts() {
             signUp.setAttribute("type", "button");
             signUp.setAttribute("class", "btn btn-primary");
             signUp.innerHTML = "Sign Up";
+            signUp.onclick = function () {
+                let userId = 'hello';
+                let postRef = firebase.database().ref('posts');
+                postRef.child(postName).child('users').push(userId);
+            }
 
             cardDiv.appendChild(title);
             cardDiv.appendChild(postDescription);
