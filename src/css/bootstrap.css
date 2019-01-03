@@ -25,6 +25,7 @@
   --warning: #ffc107;
   --danger: #dc3545;
   --light: #f8f9fa;
+  --navy: rgb(14, 46, 88);
   --dark: #343a40;
   --breakpoint-xs: 0;
   --breakpoint-sm: 576px;
@@ -6092,7 +6093,7 @@ button.close {
 }
 
 .bg-primary {
-  background-color: #007bff !important;
+  background-color: rgb(14, 46, 88) !important;
 }
 
 a.bg-primary:hover, a.bg-primary:focus,
