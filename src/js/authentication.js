@@ -21,7 +21,7 @@ function signUp() {
             firebase.auth().createUserWithEmailAndPassword(email, pw).catch(function (error) {
                 var errorMessage = error.message;
             });
-            addUserToJson(userName, email);
+            // addUserToJson(userName, email);
             setTimeout(function() {
                 login(email, pw);
             }, 500);
@@ -56,6 +56,7 @@ function login(email, pw) {
                 if (user) {
                     var email = user.email;
                     var uid = user.uid;
+                    addUserToJson(document.getElementById("upName").value, uid);
                     redirectToHomePage();
                 }
             });
@@ -72,15 +73,18 @@ function isBcitEmail(email) {
     }
 }
 
-function addUserToJson(userName, email) {
-    let re = /(\w+)[@]my[.]bcit[.]ca/;
-    let result = re.exec(email)[1];
-    let ref = firebase.database().ref("users");
-    ref.update({
-        [result]: {
-            name: userName
-        }
+function addUserToJson(userName, uid) {
+    // let re = /(\w+)[@]my[.]bcit[.]ca/;
+    // let result = re.exec(email)[1];
+    console.log(`NEW USER UID: ${uid}\n NEW USER NAME: ${userName}`);
+    let ref = firebase.database().ref("users/" + uid).set({
+        name: userName
     });
+    // ref.update({
+    //     [uid]: {
+    //         name: userName
+    //     }
+    // });
 }
 document.getElementById("signUpButton").onclick = signUp;
 document.getElementById("signInButton").onclick = signIn;
