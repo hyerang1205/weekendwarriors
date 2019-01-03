@@ -4596,7 +4596,6 @@ input[type="button"].btn-block {
   margin-bottom: 0.75rem;
 }
 
-
 @media (min-width: 600px) {
   .card-columns {
     -webkit-column-count: 2;
@@ -4643,7 +4642,6 @@ input[type="button"].btn-block {
     column-gap: 1.2rem;
     orphans: 1;
     widows: 1;
-
   }
   .card-columns .card {
     display: inline-block;

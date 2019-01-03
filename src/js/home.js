@@ -11,7 +11,7 @@ $('#datepicker').datepicker({
 function addPost() {
     let postName = document.getElementById('post-name').value;
     let postDescr = document.getElementById('post-description').value;
-    let postCate = document.getElementById('post-category').value;
+    let postCategory = document.getElementById('post-category').value;
     let postDate = document.getElementById('datepicker').value;
     var userId = firebase.auth().currentUser.uid;
     var postRef = firebase.database().ref("posts/");
@@ -23,7 +23,7 @@ function addPost() {
     let postData = {
         name: postName,
         description: postDescr,
-        category: postCate,
+        category: postCategory,
         date: postDate,
     };
     var key = postRef.child('posts').push().key;
@@ -53,12 +53,13 @@ function switchButtons(grossKey) {
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
         $('#chat-modal').modal('show');
-        populateChatModal(grossKey);
     });
     parentDiv.appendChild(chatButton);
 }
 
 function signUp(postRef, userId) {
+    //postRef.child('users').child(userId).setValue(true);
+    // let postRef = firebase.database().ref('posts').child(childKey).child('users');
     console.log(postRef);
     postRef.child(userId).set(true);
 }
@@ -66,21 +67,13 @@ function signUp(postRef, userId) {
 
 
 //document.getElementById('createPost').onclick = addPost;
-function populatePosts(_postName = "", _category = "") {
+function populatePosts(_postName = "", _category = "", _uid = "") {
     removePostsFromBoard();
-    console.log("_postName: ", _postName);
-    console.log("_category: ", _category);
-    var postData = firebase.database().ref('posts').once('value', function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
+    var postData = firebase.database().ref('posts').once('value', function(snapshot) {
+        snapshot.forEach(function(childSnapshot) {
             var postName = childSnapshot.child('name').val();
-            var category = childSnapshot.child('category').val();
             if (_postName !== "") {
                 if (postName.search(_postName) < -0) {
-                    return;
-                }
-            }
-            if (_category !== "") {
-                if (category.search(_category) < 0) {
                     return;
                 }
             }
@@ -88,10 +81,25 @@ function populatePosts(_postName = "", _category = "") {
             var description = childSnapshot.child('description').val();
             var users = childSnapshot.child('users').val();
             var date = childSnapshot.child('date').val();
-            // var messages = childSnapshot.ref('messages');
+            var category = childSnapshot.child('category').val();
             console.log(postName);
             console.log(description);
             console.log(users);
+            let userArray = Object.keys(users);
+            if (_uid !== "") {
+                let k = 0;
+                for (let i = 0; i < userArray.length; i++) {
+                    if (userArray[i] !== _uid) {
+                        continue;
+                    } else {
+                        k++;
+                    }
+                }
+                if (k < 1) {
+                    return;
+                }
+            }
+            console.log(userArray);
             let newDiv = document.createElement('div');
             newDiv.setAttribute("class", "card");
             newDiv.id = grossKey;
@@ -100,28 +108,42 @@ function populatePosts(_postName = "", _category = "") {
             let title = document.createElement('h5');
             title.setAttribute("class", "card-title");
             title.innerHTML = postName;
+
+            let postCategory = document.createElement('span');
+            postCategory.setAttribute("class", "text-muted reloacation rightFloat");
+            postCategory.innerHTML = category;
+
             let postDescription = document.createElement('p');
             postDescription.setAttribute("class", "card-text");
             postDescription.innerHTML = description;
 
             let postDate = document.createElement('small');
             postDate.setAttribute("class", "text-muted");
-            postDate.innerHTML = date;
-
-
-            let postCate = document.createElement('span');
-            postCate.setAttribute("class", "text-muted");
-            postCate.innerHTML = category;
+            postDate.innerHTML = "~ " + date;
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
             signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Join";
             signUpButton.id = 'signUpButton';
-            signUpButton.onclick = function () {
+            signUpButton.onclick = function() {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
-                setTimeout(function () {
+                // firebase.auth().onAuthStateChanged(function(user) {
+                //     if (user) {
+                //         var email = user.email;
+                //         console.log(email);
+                //         let re = /(\w+)[@]my[.]bcit[.]ca/;
+                //         let result = re.exec(email)[1];
+                //         console.log(result);
+                //         firebase.database().ref("users").on("child_added", function(snapshot) {
+                //             if (snapshot.key === result) {
+                //                 userId = snapshot.val().name;
+                //             }
+                //         });
+                //     }
+                // });
+                setTimeout(function() {
                     if (userId === "") {
                         // Login required
                         alert("Please log in.");
@@ -134,7 +156,7 @@ function populatePosts(_postName = "", _category = "") {
             }
 
             cardDiv.appendChild(title);
-            cardDiv.appendChild(postCate);
+            cardDiv.appendChild(postCategory);
             cardDiv.appendChild(postDescription);
             cardDiv.appendChild(postDate);
             cardDiv.appendChild(signUpButton);
@@ -205,24 +227,15 @@ function lookupUserName(userId) {
     let username;
     firebase.database().ref("/users/" + userId).once("value").then((snap) => {
         username = snap.child("name").val();
-        return username;
     });
+
+    return username;
 }
 
 function getMessages(postId) {
     let posts = [];
-
-    firebase.database().ref('posts/' + postId).child('messages').once('value', function (snapshot) {
-        snapshot.forEach(function (childSnapshot) {
-            const msgObj = {
-                author: childSnapshot.child('name').val(),
-                content: childSnapshot.child('message').val()
-            };
-            posts.push(msgObj);
-        });
-    }).then(() => {
-        return posts;
-    });
+    // TODO
+    firebase.database().ref("/posts/" + postId + "/messages")
 }
 
 function createChatNode(content, author) {
@@ -256,7 +269,7 @@ function removePostsFromBoard() {
 }
 
 
-firebase.auth().onAuthStateChanged(function (user) {
+firebase.auth().onAuthStateChanged(function(user) {
     if (user) {
         // User is signed in.
         var displayName = user.displayName;
@@ -272,10 +285,23 @@ let searchResultMessage = document.getElementById("searchResultMessage");
 
 document.getElementById("searchButton").onclick = function() {
     populatePosts(document.getElementById("searchField").value);
-    searchResultMessage.innerHTML = "Search results for " + document.getElementById("searchField").value;
+    searchResultMessage.innerHTML = "Search results for " + "\"" + document.getElementById("searchField").value + "\"";
     if (document.getElementById("searchField").value === "") {
         searchResultMessage.innerHTML = "";
     }
+}
+
+document.getElementById("searchMyEvent").onclick = function () {
+    firebase.auth().onAuthStateChanged(function (user) {
+        if (user) {
+            // User is signed in.
+            var displayName = user.displayName;
+            var email = user.email;
+            var uid = user.uid;
+            console.log(uid);
+            populatePosts("", "", uid);
+        }
+    });
 }
 
 document.getElementById("searchViewAll").onclick = function() {
@@ -285,20 +311,20 @@ document.getElementById("searchViewAll").onclick = function() {
 
 document.getElementById("searchEntertainment").onclick = function () {
     populatePosts("", "Entertainment");
-    searchResultMessage.innerHTML = "Search results for Entertainment";
+    searchResultMessage.innerHTML = "Search results for \"Entertainment\"";
 }
 
 document.getElementById("searchLearning").onclick = function () {
     populatePosts("", "Learning");
-    searchResultMessage.innerHTML = "Search results for Learning";
+    searchResultMessage.innerHTML = "Search results for \"Learning\"";
 }
 
 document.getElementById("searchOutdoor").onclick = function () {
     populatePosts("", "Outdoor");
-    searchResultMessage.innerHTML = "Search results for Outdoor";
+    searchResultMessage.innerHTML = "Search results for \"Outdoor\"";
 }
 
 document.getElementById("searchSports").onclick = function () {
     populatePosts("", "Sports");
-    searchResultMessage.innerHTML = "Search results for Sports";
+    searchResultMessage.innerHTML = "Search results for \"Sports\"";
 }

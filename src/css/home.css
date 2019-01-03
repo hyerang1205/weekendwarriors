@@ -10,7 +10,11 @@ body{
     margin-bottom: 1em;
 }
 
-
+.reloacation{
+    position: relative;
+    top : -2.3em;
+  font-weight: bold;
+}
 #posts{
   margin: 1em;
 }
