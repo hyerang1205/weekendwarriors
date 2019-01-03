@@ -26,12 +26,12 @@ function addPost() {
         category: postCate,
         date: postDate,
         // users: userId,
-        messages: {
-            fakeId: {
-                name: 'Weekend Warrior Admin',
-                message: 'Welcome to the chat room for ' + postName
-            }
-        }
+        // messages: {
+        //     aaaaaaaaaaaaaaaaa: {
+        //         name: 'Weekend Warrior Admin',
+        //         message: 'Welcome to the chat room for ' + postName
+        //     }
+        // }
     };
     var key = postRef.child('posts').push().key;
     let updates = {};
