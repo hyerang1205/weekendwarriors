@@ -9,8 +9,6 @@
     <link rel="stylesheet" href="./src/css/bootstrap.css" />
     <link rel="stylesheet" href="./src/css/home.css" />
     <link href="https://unpkg.com/gijgo@1.9.11/css/gijgo.min.css" rel="stylesheet" type="text/css" />
-
-
     <script src="https://www.gstatic.com/firebasejs/5.7.2/firebase.js"></script>
     <script>
         // Initialize Firebase
@@ -30,7 +28,6 @@
 
     <script src="https://unpkg.com/gijgo@1.9.11/js/gijgo.min.js" type="text/javascript"></script>
 
-    <script src="./src/js/home.js"></script>
     <script src="./src/js/search.js"></script>
 
 </head>
@@ -63,12 +60,11 @@
                         <a class="nav-link" class="btn btn-primary" data-toggle="modal" data-target="#createEvent">Create</a>
                     </li>
                 </ul>
-                <form class="form-inline my-2 my-lg-0">
-                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                <form class="form-inline my-2 my-lg-0" action="javascript:">
+                    <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search" id="searchField">
+                    <button class="btn btn-outline-success my-2 my-sm-0" type="submit" id="searchButton">Search</button>
                 </form>
                 <ul class="navbar-nav px-3">
-
                     <li class="nav-item text-nowrap">
                         <a class="nav-link" href="#">Sign out</a>
                     </li>
@@ -114,6 +110,8 @@
             </div>
         </div>
     </div>
+    <script src="./src/js/home.js"></script>
+
 </body>
 
 </html>
