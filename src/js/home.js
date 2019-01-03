@@ -76,7 +76,7 @@ function populatePosts(_postName="") {
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
-            signUpButton.setAttribute("class", "btn btn-primary");
+            signUpButton.setAttribute("class", "btn btn-primary rightFloat");
             signUpButton.innerHTML = "Sign Up";
             signUpButton.onclick = function () {
                 let userId = firebase.auth().currentUser.uid;

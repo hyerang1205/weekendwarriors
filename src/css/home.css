@@ -9,7 +9,10 @@ body{
     margin-right: 1em;
     margin-left: 1em;
 }
-
+.rightFloat{
+    float:right !important;
+    margin-bottom: 1em;
+}
 #posts{
   margin: 1em;
 }
