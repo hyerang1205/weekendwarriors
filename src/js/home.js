@@ -53,6 +53,7 @@ function switchButtons(grossKey) {
     chatButton.setAttribute("data-target", "chat-modal");
     chatButton.addEventListener("click", () => {
         $('#chat-modal').modal('show');
+        populateChatModal(grossKey);
     });
     parentDiv.appendChild(chatButton);
 }
@@ -201,9 +202,10 @@ function populateChatModal(postId) {
             chatBody.appendChild(chatMsg);
         });
     });
-
     const INPUT = document.getElementById("chat-input");
     const POST_BUTTON = document.getElementById("chat-button");
+
+    INPUT.value = "";
 
     POST_BUTTON.onclick = () => {
         const content = INPUT.value;
@@ -211,7 +213,7 @@ function populateChatModal(postId) {
 
         firebase.database().ref("/users/" + firebase.auth().currentUser.uid).once("value").then((snap) => {
             author = snap.child("name").val();
-            // console.log("author is: " + author);
+            console.log("author is: " + author);
     
             firebase.database().ref(`posts/${postId}/messages`).push({
                 message: content,
@@ -220,7 +222,8 @@ function populateChatModal(postId) {
         });
 
         populateChatModal(postId);
-    }
+    };
+
 }
 
 function lookupUserName(userId) {
