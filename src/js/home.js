@@ -88,11 +88,11 @@ function populatePosts(_postName="") {
             postDescription.setAttribute("class", "card-text");
             postDescription.innerHTML = description;
 
-            /*let date = document.createElement('p');
-            let dateSmall = document.createElement('small');
-            dateSmall.setAttribute("class", "text-muted");
-            dateSmall.innerHTML = date;
-            date.appendChild(dateSmall);*/
+            // let date = document.createElement('p');
+            // let dateSmall = document.createElement('small');
+            // dateSmall.setAttribute("class", "text-muted");
+            // dateSmall.innerHTML = date;
+            // date.appendChild(dateSmall);
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
