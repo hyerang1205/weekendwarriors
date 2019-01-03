@@ -28,9 +28,27 @@ function addPost() {
 
     firebase.database().ref().update(updates).then(() => {
         signUp(postRef.child(key).child('users'), userId);
+        switchButtons(key);
     });
 }
 
+function switchButtons(grossKey) {
+    const parentDiv = document.getElementById(grossKey).getElementsByClassName("card-body")[0];
+    const button = parentDiv.getElementsByTagName("button")[0];
+
+    parentDiv.removeChild(button);
+    
+    const chatButton = document.createElement("button");
+    chatButton.innerHTML = 'Chat!'
+    chatButton.setAttribute("type", "button");
+    chatButton.setAttribute("class", "btn btn-primary");
+    //chatButton.setAttribute("data-toggle", "modal");
+    chatButton.setAttribute("data-target", "chat-modal");
+    chatButton.addEventListener("click", () => {
+        $('#chat-modal').modal('show');
+    });
+    parentDiv.appendChild(chatButton);
+}
 
 function signUp(postRef, userId) {
     //postRef.child('users').child(userId).setValue(true);
@@ -75,16 +93,17 @@ function populatePosts(_postName="", _tag="") {
             postDescription.setAttribute("class", "card-text");
             postDescription.innerHTML = description;
 
-            /*let date = document.createElement('p');
-            let dateSmall = document.createElement('small');
-            dateSmall.setAttribute("class", "text-muted");
-            dateSmall.innerHTML = date;
-            date.appendChild(dateSmall);*/
+            // let date = document.createElement('p');
+            // let dateSmall = document.createElement('small');
+            // dateSmall.setAttribute("class", "text-muted");
+            // dateSmall.innerHTML = date;
+            // date.appendChild(dateSmall);
 
             let signUpButton = document.createElement('button');
             signUpButton.setAttribute("type", "button");
             signUpButton.setAttribute("class", "btn btn-primary");
             signUpButton.innerHTML = "Sign Up";
+            signUpButton.id = 'signUpButton';
             signUpButton.onclick = function () {
                 let userId = firebase.auth().currentUser.uid;
                 let postRef = firebase.database().ref('posts');
@@ -109,6 +128,7 @@ function populatePosts(_postName="", _tag="") {
                         window.location.assign("././index.html");
                     } else {
                         signUp(postRef.child(grossKey).child('users'), userId);
+                        switchButtons(grossKey);
                     }
                 }, 300);
             }
