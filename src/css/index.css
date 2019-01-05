@@ -1,5 +1,5 @@
 body {
- background-image: url('../img/background.png');
+ background-image: url('../img/background.jpg');
  background-color: #cccccc;
 }
 #signIn, #signUp {
@@ -26,6 +26,7 @@ border-radius: 5%;
 #marginBottom{
     margin-bottom: 1em;
 }
+
 .error {
     color: tomato;
 }

@@ -1,59 +1,50 @@
-a:hover {
-    cursor: pointer;
+a:hover{
+ cursor: pointer;
 }
-
-body {
+body{
     background-color: #ebe6e6;
 }
 
-.titleInline{
-    display: inline;
-}
-
-.card-columns {
-    margin-top: 2em;
-    margin-right: 1em;
-    margin-left: 1em;
-}
-
-.rightFloat {
-    float: right !important;
+.rightFloat{
+    float:right !important;
     margin-bottom: 1em;
 }
-.leftFloat {
-    float: left !important;}
 
-.zeroPaddingMargin{
-    padding : 0 !important;
-    margin: 0 !important;
-}
-/* .reloacation {
+.reloacation{
     position: relative;
-    top: -2.3em;
-    font-weight: 400;
-} */
-
-.titleT{
-    font-weight: bold !important;
+    top : -2.3em;
+  font-weight: bold;
 }
-#posts {
-    margin: 1em;
+#posts{
+  margin: 1em;
+}
+
+.zero-padding-margin {
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-left: 0.5em !important;
 }
 
 .chat-box {
-    border: 2px solid #dedede;
-    background-color: #f1f1f1;
-    border-radius: 5px;
-    padding: 0.63em;
-    margin: 0.63em 0.63em;
+  border: 2px solid #dedede;
+  background-color: #f1f1f1;
+  border-radius: 5px;
+  padding: 0.63em;
+  margin: 0.63em 0.63em;
 }
 
 .chat-box::after {
-    content: "";
-    clear: both;
-    display: table;
+  content: "";
+  clear: both;
+  display: table;
 }
 
 .name-left {
-    color: #999;
+  color: #999;
+}
+
+#searchResultMessage {
+  margin-left: 1.5em;
+  margin-top: .5em;
+  font-size: 1.3em;
 }
